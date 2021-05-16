@@ -2,10 +2,10 @@
 #'
 #' @param Y matrix,vector,data.frame; Dependent Variable from other machine learning method
 #' @param X matrix; Data matrix (each row is an observation, each column is a variable)
-#' @param weight_by_var logical; use
+#' @param weight_by_var logical; use variance to decide weight,if FALSE need to set Y_weight and X_weight
 #' @param Y_weight numeric; the weight for Y
 #' @param X_weight numeric; the weight for X
-#' @param ... Other arguments that can be passed to stsne(except dims,check_duplicates and Y_init )
+#' @param ... Other arguments that can be passed to stsne(except col_weights)
 #'
 #' @return List with the following elements:
 #' \item{Y}{Matrix containing the new representations for the objects}
@@ -33,6 +33,7 @@ Sutsne <- function(Y,X,weight_by_var = TRUE,Y_weight = NULL,X_weight = NULL,...)
     stop("Y should be a matrix ,vector or data.frame")
   }
   if(NROW(Y)!=NROW(X)) {stop("X and Y should have the same row")}
+  if(!is.null(Y_weight)&!is.null(X_weight)) weight_by_var = FALSE
   if(weight_by_var){
     w <- weightVar(Y,X)
   }else{

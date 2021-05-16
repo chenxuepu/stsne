@@ -26,7 +26,7 @@
 #' @param exaggeration_factor numeric; Exaggeration factor used to multiply the P matrix in the first part of the optimization (default: 12.0)
 #' @param num_threads integer; Number of threads to use when using OpenMP, default is 1. Setting to 0 corresponds to detecting and using all available cores
 #' @param weights vector;the weight for cost
-#' @param col_weights vector;the weight for column. Note that when using this, the pca_scale will Mandatory designation as FALSE
+#' @param col_weights vector;the weight for column. Note that when using this, the pca_scale will Mandatory designation as FALSE.Note that when using this and pca = FALSE,the normalize will Mandatory designation as FALSE. (default: NULL)
 #' @param only_r logical;if TRUE will use r code only,and theta will be set as 0.0.if FALSE will use c++ code to do (default: FALSE)
 #' @param r numeric;a param the can regulation density of point , if r != 2 ,then theta will be set as 0.0. (default: 2)
 #'
@@ -126,6 +126,7 @@ stsne.default <- function(X, dims=2, initial_dims=50,
                                   momentum=momentum, final_momentum=final_momentum, eta=eta, exaggeration_factor=exaggeration_factor,weights = weights,only_r = only_r,r = r)
   if(!is.null(col_weights)&length(col_weights)!=ncol(X)) { stop("number of col_weights need equal to column of X") }
   if(!is.null(col_weights)) pca_scale <- FALSE
+  if(!is.null(col_weights)&!pca) normalize <- FALSE
   # Check for missing values
   X <- na.fail(X)
 
